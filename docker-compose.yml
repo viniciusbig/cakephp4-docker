@@ -1,0 +1,71 @@
+version: '3'
+
+services:
+
+  cakephp4:
+    # image: shinsenter/cakephp4:latest
+    build: .
+    env_file: .env
+    volumes:
+      - ${PROJECT_ROOT}:/var/www/html:rw,delegated
+      - ${SSL_CERTS}:/etc/ssl/web
+    environment:
+      TZ: UTC
+      PUID: ${UID:-9999}   # you current local user `id $user`
+      PGID: ${GID:-9999}   # you current local group `id $user`
+    ports:
+      - "${APACHE_PORT}:80"
+      - "${APACHE_PORT_HTTPS}:443"
+    links:
+      - mysql
+      - redis
+
+  ## OTHER CONTAINERS SUCH AS REDIS OR MYSQL ###################################
+
+  mysql:
+    image: mysql:latest
+    env_file: .env
+    environment:
+      TZ: UTC
+    volumes:
+      - "./.databases/data:/var/lib/mysql"
+      - "./.databases/.load-dumps:/docker-entrypoint-initdb.d"
+    ports:
+      - "${MYSQL_PORT}:3306"
+  
+  # mariadb:
+  #   image: mariadb
+  #   restart: always
+  #   env_file: .env
+  #   user: ${UID:-224409211}:${GID:-224395777}
+  #   ports:
+  #     - ${MYSQL_PORT}:3306
+  #   volumes:
+  #     - "./.databases/data:/var/lib/mysql"
+  #     - "./.databases/.load-dumps:/docker-entrypoint-initdb.d"
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    env_file: .env
+    ports:
+      - ${PMA_EXPOSED_PORT}:80
+    links:
+      - mysql
+
+  adminer:
+    image: adminer
+    env_file: .env
+    ports:
+      - ${ADMINER_EXPOSED_PORT}:8080
+
+  mailhog:
+    image: mailhog/mailhog
+    env_file: .env
+    ports:
+      - ${MAILHOG_SMTP_PORT}:1025
+      - ${MAILHOG_HTTP_PORT}:8025
+
+  redis:
+    image: redis:latest
+    ports:
+      - "${REDIS_EXPOSED_PORT}:6379"

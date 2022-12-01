@@ -1,0 +1,5 @@
+.databases/data
+.env
+dumps
+src
+ssl-certs

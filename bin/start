@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+BASE=$(pwd)
+source $BASE/.env
+
+docker-compose up -d
+
+echo "
+===================== 🚀 Done 🚀 ===================
+
+      Containers running
+      
+      Access your new links:
+      🌎 Web server: http://localhost/
+      🌎 Web server (HTTPS): https://localhost/
+      ⚙️  PHPMyAdmin: http://localhost:${PMA_EXPOSED_PORT}
+      ⚙️  Adminer: http://localhost:${ADMINER_EXPOSED_PORT}
+      ✉️  Local emails: http://localhost:${MAILHOG_HTTP_PORT}
+      
+===================== 🚀 Done 🚀 ==================="

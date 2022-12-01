@@ -1,0 +1,21 @@
+#!/bin/bash
+
+BASE=$(pwd)
+
+#load environment variables
+source $BASE/.env
+
+# create mysql dump command inside docker container
+MYSQL_COMMAND="docker exec -i $(docker-compose ps -q ${PMA_HOST}) mysql -u${MYSQL_ROOT_USER} -p${MYSQL_ROOT_PASSWORD}"
+
+# drop the database and recreate it.
+$MYSQL_COMMAND -e "DROP DATABASE IF EXISTS ${DB_TO_IMPORT}; CREATE DATABASE ${DB_TO_IMPORT};"
+
+# import the data.
+$MYSQL_COMMAND ${DB_TO_IMPORT} < ${DB_TO_IMPORT_DUMP}
+
+# grant user privileges on this database
+$MYSQL_COMMAND -e "GRANT ALL PRIVILEGES ON ${DB_TO_IMPORT}.* TO '${MYSQL_USER}'@'%';"
+
+# list all databases
+$MYSQL_COMMAND -e "SHOW DATABASES;"

@@ -1,0 +1,15 @@
+#!/bin/bash
+
+BASE=$(pwd)
+
+#load environment variables
+source $BASE/.env
+
+# create mysql dump command inside docker container
+MYSQL_COMMAND="docker exec -i $(docker-compose ps -q ${PMA_HOST}) mysqldump -u${MYSQL_ROOT_USER} -p${MYSQL_ROOT_PASSWORD}"
+
+# dump file name
+DUMP_NAME=dump-${DB_TO_EXPORT}-$(date '+%Y-%m-%d-%H%M%S').sql
+
+# create the database dump locally
+$MYSQL_COMMAND --databases $DB_TO_EXPORT > ./.databases/.dumps/$DUMP_NAME
