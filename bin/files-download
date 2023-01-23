@@ -1,0 +1,12 @@
+#!/bin/bash
+
+BASE=$(pwd)
+
+#load environment variables
+source $BASE/.env
+
+# copy everything with SCP (always copy everything)
+# scp -r $REMOTE_SSH:$REMOTE_FILE_PATH $LOCAL_FILE_PATH
+
+# rsync everything getting only the new changes
+rsync -azP --delete $REMOTE_SSH:$REMOTE_FILE_PATH $LOCAL_FILE_PATH

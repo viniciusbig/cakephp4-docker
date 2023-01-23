@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+# stop all containers
+docker-compose stop
+
+# remove all containers
+docker-compose down -v
