@@ -35,6 +35,13 @@ RUN curl https://get.volta.sh | bash
 # install node LTS
 RUN volta install node
 
+# VOLTA is not available for MAC M1, so we need to install node manually
+# Install NVM
+# RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
+# RUN source ~/.bashrc
+# # install NODE LTS (hydrogen)
+# RUN nvm install lts/hydrogen
+
 # ==========================================================
 
 # You can easily change PHP-FPM configurations
