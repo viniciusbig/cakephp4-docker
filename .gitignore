@@ -1,4 +1,5 @@
 .databases/data
+.databases/.dumps
 .env
 dumps
 src

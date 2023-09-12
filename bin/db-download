@@ -9,4 +9,4 @@ source $BASE/.env
 DUMP_NAME=${REMOTE_DB}-$(date '+%Y-%m-%d-%H%M%S').sql.gz
 
 # connect to remote database and dump to local
-ssh $REMOTE_SSH "mysqldump -u ${REMOTE_DB_USER} -p${REMOTE_DB_PASS} ${REMOTE_DB} | gzip -9" > ./.databases/.dumps/$DUMP_NAME
+ssh $REMOTE_SSH "mysqldump --opt -u ${REMOTE_DB_USER} -p${REMOTE_DB_PASS} -h ${REMOTE_HOST} --no-tablespaces ${REMOTE_DB} | gzip -9" > ./.databases/.dumps/$DUMP_NAME
